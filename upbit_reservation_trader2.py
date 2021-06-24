@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Jun 25 06:05:23 2021
+Created on Thu Jun 25 06:44:23 2021
 
 @author: raven90
 """
@@ -43,6 +43,7 @@ def get_balance(coin):
                 return float(b['balance'])
             else:
                 return 0
+        time.sleep(0.2)
     return 0
 
 #해당 코인 매수평균단가 반환
@@ -55,6 +56,7 @@ def get_avg_buy_price(coin):
                 return float(b['avg_buy_price'])
             else:
                 return 0
+        time.sleep(0.2)
     return 0
 
 
@@ -136,7 +138,7 @@ schedule.every().day.at("05:20").do(buy_job)
 # 매일 05:50 에 실행 - 매도
 schedule.every().day.at("05:50").do(sell_job_10)
 ##################################################    
-# 매일 09:50 에 실행 - 매도
+# 매일 08:50 에 실행 - 매도
 schedule.every().day.at("08:50").do(sell_job_03)
 ##################################################    
 # 매일 09:20 에 실행  -매수
