@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Jun 24 00:42:23 2021
+Created on Thu Jun 25 06:05:23 2021
 
 @author: raven90
 """
@@ -59,21 +59,21 @@ def get_avg_buy_price(coin):
 
 
 # 시장가 매도 함수 
-def sell(coin):
+def sell(coin, percent):
     amount = get_balance(coin) #upbit.get_balance(coin)
-    cur_price = pyupbit.get_current_price(coin) 
+    ticker = 'KRW-' + coin
+    cur_price = pyupbit.get_current_price(ticker) 
     total = amount * cur_price 
     
     old_price = get_avg_buy_price(coin)
     old_total = amount * old_price 
     
-    if total>5001 and total>= old_total * 1.10:  
-        #시장가 매도 인데 매수시점보다 10% 상승했으면 매도 진행함.
-        ticker = 'KRW-' + coin
+    if total>5001 and total>= old_total * percent:  
+        #시장가 매도 인데 매수시점보다 percent 상승했으면 매도 진행함.
         res = upbit.sell_market_order(ticker, amount) 
         strMsg = coin + " : 시장가 매도 =" + str(res)
         post_message(strMsg)
-            
+
 
 # 시장가 매수 함수 
 def buy(coin): 
@@ -92,21 +92,27 @@ def buy(coin):
         post_message(strMsg)
 
 
-
-
-
 def buy_job():
-    #매수 
+    #매수
     # 단, 이미 보유하고 있으면 추가 매수는 안함.
     for coin in coins:
         buy(coin)
         time.sleep(0.2)
         
-def sell_job():
+def sell_job_10():
     #매도
-    # 단, 3% 이상 수익율이면 매도 아니면 홀딩
+    # 단, 10% 이상 수익율이면 매도 아니면 홀딩
+    percent = 1.10
     for coin in coins:
-        sell(coin)
+        sell(coin, percent)
+        time.sleep(0.2)        
+
+def sell_job_03():
+    #매도 시간은 오전 8시50분
+    # 단, 3% 이상 수익율이면 매도 아니면 홀딩
+    percent = 1.03
+    for coin in coins:
+        sell(coin, percent)
         time.sleep(0.2)        
     
 #연습용임    
@@ -118,49 +124,52 @@ def test_job():
 
 ##################################################    
 #출처 : https://lemontia.tistory.com/508
-
 # 매일 01:20 에 실행  -매수
 schedule.every().day.at("01:20").do(buy_job)
 
 # 매일 01:50 에 실행 - 매도
-schedule.every().day.at("01:50").do(sell_job)
-#############################################
+schedule.every().day.at("01:50").do(sell_job_10)
+##################################################    
 # 매일 05:20 에 실행  -매수
 schedule.every().day.at("05:20").do(buy_job)
 
 # 매일 05:50 에 실행 - 매도
-schedule.every().day.at("05:50").do(sell_job)
-#############################################
+schedule.every().day.at("05:50").do(sell_job_10)
+##################################################    
+# 매일 09:50 에 실행 - 매도
+schedule.every().day.at("08:50").do(sell_job_03)
+##################################################    
 # 매일 09:20 에 실행  -매수
 schedule.every().day.at("09:20").do(buy_job)
 
 # 매일 09:50 에 실행 - 매도
-schedule.every().day.at("09:50").do(sell_job)
-#############################################
+schedule.every().day.at("09:50").do(sell_job_10)
+##################################################    
 # 매일 13:20 에 실행  -매수
 schedule.every().day.at("13:20").do(buy_job)
 
 # 매일 13:50 에 실행 - 매도
-schedule.every().day.at("13:50").do(sell_job)
-#############################################
+schedule.every().day.at("13:50").do(sell_job_10)
+##################################################    
 # 매일 17:20 에 실행  -매수
 schedule.every().day.at("17:20").do(buy_job)
 
 # 매일 17:50 에 실행 - 매도
-schedule.every().day.at("17:50").do(sell_job)
-#############################################
+schedule.every().day.at("17:50").do(sell_job_10)
+##################################################    
 # 매일 21:20 에 실행  -매수
 schedule.every().day.at("21:20").do(buy_job)
 
 # 매일 21:50 에 실행 - 매도
-schedule.every().day.at("21:50").do(sell_job)
-#############################################
+schedule.every().day.at("21:50").do(sell_job_10)
+##################################################    
 # 매일 02:00 에 실행 -테스트용
 schedule.every().day.at("02:00").do(test_job)
 
 # 매일 06:00 에 실행 -테스트용
 schedule.every().day.at("06:00").do(test_job)
-#############################################
+##################################################    
+
 
 #실제 실행구문
 strMsg = "==예약 매수 매도 autotrader 시작=="
@@ -169,4 +178,4 @@ post_message(strMsg)
 while True:
     schedule.run_pending() # 스케쥴 실행
     time.sleep(1)     
-    
+  
