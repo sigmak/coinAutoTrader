@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Jun 25 06:44:23 2021
+Created on Thu Jun 24 00:42:23 2021
 
 @author: raven90
 """
@@ -129,47 +129,38 @@ def test_job():
 # 매일 01:20 에 실행  -매수
 schedule.every().day.at("01:20").do(buy_job)
 
-# 매일 01:50 에 실행 - 매도
-schedule.every().day.at("01:50").do(sell_job_10)
-##################################################    
 # 매일 05:20 에 실행  -매수
 schedule.every().day.at("05:20").do(buy_job)
 
-# 매일 05:50 에 실행 - 매도
-schedule.every().day.at("05:50").do(sell_job_10)
-##################################################    
-# 매일 08:50 에 실행 - 매도
-schedule.every().day.at("08:50").do(sell_job_03)
-##################################################    
 # 매일 09:20 에 실행  -매수
 schedule.every().day.at("09:20").do(buy_job)
 
-# 매일 09:50 에 실행 - 매도
-schedule.every().day.at("09:50").do(sell_job_10)
-##################################################    
 # 매일 13:20 에 실행  -매수
 schedule.every().day.at("13:20").do(buy_job)
 
-# 매일 13:50 에 실행 - 매도
-schedule.every().day.at("13:50").do(sell_job_10)
-##################################################    
 # 매일 17:20 에 실행  -매수
 schedule.every().day.at("17:20").do(buy_job)
 
-# 매일 17:50 에 실행 - 매도
-schedule.every().day.at("17:50").do(sell_job_10)
-##################################################    
 # 매일 21:20 에 실행  -매수
 schedule.every().day.at("21:20").do(buy_job)
 
-# 매일 21:50 에 실행 - 매도
-schedule.every().day.at("21:50").do(sell_job_10)
+##################################################    
+# 매일 08:50 에 실행 - 매도
+schedule.every().day.at("08:50").do(sell_job_03)
+
+##################################################    
+# 10분에 한번씩 수익율10% 이상 비교 매도 실행 
+schedule.every(10).minutes.do(sell_job_10)
+
 ##################################################    
 # 매일 02:00 에 실행 -테스트용
 schedule.every().day.at("02:00").do(test_job)
 
 # 매일 06:00 에 실행 -테스트용
 schedule.every().day.at("06:00").do(test_job)
+
+# 매일 07:00 에 실행 -테스트용
+schedule.every().day.at("07:00").do(test_job)
 ##################################################    
 
 
